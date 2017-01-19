@@ -1,6 +1,6 @@
-# WPEB (WordPress Easy Backup): A simple (pre-update) wordpress backup script.
-### (c) 2017 Madalin Tache
-### http://github.com/niladam/wpeb
+## WPEB (WordPress Easy Backup): A simple (pre-update) wordpress backup script.
+#### (c) 2017 Madalin Tache
+#### http://github.com/niladam/wpeb
 
 A simple bash script that takes a snapshot of the current WordPress
 directory and database. The archive will contain a database dump, and
