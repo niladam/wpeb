@@ -31,11 +31,16 @@ By default the plugin does the following:
 
 Install with:
 
-`curl -O https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh`
+```
+curl -O https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh
+chmod +x wpeb.sh
+mv wpeb.sh /usr/local/bin/wpeb
+```
 
-`chmod +x wpeb.sh`
+Or in a one quick command that you can paste:
 
-`mv wpeb.sh /usr/local/bin/wpeb`
+`curl -O https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh ; chmod +x wpeb.sh ; mv wpeb.sh /usr/local/bin/wpeb`
+
 
 # Using
 
@@ -43,8 +48,9 @@ Install with:
 
 Use with:
 
-`cd /home/someuser/public_html`
-
-`wpeb`
+```
+cd /home/someuser/public_html
+wpeb
+```
 
 And the magic happens.
