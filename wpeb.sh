@@ -237,6 +237,42 @@ function run_backup() {
 	backup_wordpress
 	cleanup
 }
+# Self-update functionality
+run_update() {
+	WPEB_NOW_UPDATE=$(date +"%Y-%m-%d-%H%M")
+	WPEB_MAIN="https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh"
+	WPEB_TEMP="/tmp/wpeb.$WPEB_NOW_UPDATE"
+	WPEB_TARGET="/usr/local/bin/wpeb"
+	WPEB_TEMP_DL=$(curl -sSL $WPEB_MAIN -o $WPEB_TEMP)
+	WPEB_DOWN_OK=$?
+	if [ $WPEB_DOWN_OK -ne 0 ]; then
+		# For some reason we couldn't download, let's bail.
+		echo ""
+		echo " *** For some reason, i couldn't download the latest version of WPEB"
+		echo " *** Maybe you want to have a look at the docs and try a manual install ?"
+		echo " *** https://niladam.github.io/wpeb  ***"
+		echo ""
+		exit 1
+	fi
+	WPEB_NEW_VERSION=$(cat "$WPEB_TEMP" | grep WPEB_VER | head -1 | cut -d = -f2 | tr -d '"')
+	if echo $WPEB_NEW_VERSION $WPEB_OLD_VERSION | awk '{exit $1>$2?0:1}'
+	then
+		# echo WPEB_NEW_VERSION greater than WPEB_OLD_VERSION
+		# Got newer version, move to target file.
+		echo " *** New version found, $WPEB_NEW_VERSION. You have $WPEB_OLD_VERSION. Proceeding with install.."
+	  	mv -f "$WPEB_TEMP" "$WPEB_TARGET"
+	  	echo ""
+	  	echo " *** New version, $WPEB_NEW_VERSION was updated. Enjoy!"
+	  	echo ""
+	else
+		# Now that should be impossible!:)
+		echo " *** Apparently, the installed version is NEWER than the CURRENT version.."
+		echo " *** This can happen if the file has been manually modified and/or altered.."
+		echo " *** If you think this is a mistake, please open an issue at "
+		echo " *** https://github.com/niladam/wpeb/issues *** "
+		exit 1
+	fi
+}
 
 # Let's add arguments functionality
 for i in "$@"
@@ -289,10 +325,8 @@ case $i in
         shift
         ;;
     --up|--self-update)
-		# For now, it's missing.
-		# This is where we'll run the update functionality.
-		show_message "Self-update functionality is still in developent" ok
-		exit 0
+		run_update
+
 		;;
     -h|--h|--help)
         echo ${B}${V} ""
