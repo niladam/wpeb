@@ -182,11 +182,11 @@ function repair_and_optimize() {
 		if [ "$WPEB_REPOPTIM" == "yes" ]; then
 		show_message "Running repair and optimization on the current database.." ok
 		wp db repair &>/dev/null
-		if [ $? -eq 0 ]
+		if [ $? -eq 0 ]; then
 			show_message "DB repair failed.." notok
 		fi
 		wp db optimize
-		if [ $? -eq 0 ]
+		if [ $? -eq 0 ]; then
 			show_message "DB optimize failed.." notok
 		fi
 		fi
