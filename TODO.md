@@ -6,6 +6,10 @@
 - [x] Configurable repair and optimize
 - [x] Configurable compression 'power'
 - [x] Run as root
+- [ ] Create installer for easy running ?
+- [ ] Add command parameters (ie `--skip-uploads`, `--repair`, `--optimize`, `--compression`, `--output-folder`)
+- [ ] *Provide ability to have wp-cli installed*
+- [ ] ***Provide alternative if wp-cli is missing?***
 - [ ] User configurable setting (ie: run backup for user)
   - [ ] cPanel compatible?
   - [ ] Plesk compatible?
