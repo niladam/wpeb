@@ -289,6 +289,7 @@ case $i in
 		# For now, it's missing.
 		# This is where we'll run the update functionality.
 		show_message "Self-update functionality is still in developent" ok
+		;;
     -h|--h|--help)
         echo ""
         echo "                        _          "
