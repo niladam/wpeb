@@ -243,6 +243,7 @@ run_update() {
 	WPEB_MAIN="https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh"
 	WPEB_TEMP="/tmp/wpeb.$WPEB_NOW_UPDATE"
 	WPEB_TARGET="/usr/local/bin/wpeb"
+	WPEB_OLD_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')
 	WPEB_TEMP_DL=$(curl -sSL $WPEB_MAIN -o $WPEB_TEMP)
 	WPEB_DOWN_OK=$?
 	if [ $WPEB_DOWN_OK -ne 0 ]; then
@@ -254,7 +255,7 @@ run_update() {
 		echo ""
 		exit 1
 	fi
-	WPEB_NEW_VERSION=$(cat "$WPEB_TEMP" | grep WPEB_VER | head -1 | cut -d = -f2 | tr -d '"')
+	WPEB_NEW_VERSION=$(grep WPEB_VER "$WPEB_TEMP" | head -1 | cut -d = -f2 | tr -d '"')
 	if echo $WPEB_NEW_VERSION $WPEB_OLD_VERSION | awk '{exit $1>$2?0:1}'
 	then
 		# echo WPEB_NEW_VERSION greater than WPEB_OLD_VERSION
