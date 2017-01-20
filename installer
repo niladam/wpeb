@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# curl -sSL https://niladam.github.io/wpeb/installer | bash
+# curl -sSL https://wpeb-installer.includes.io | bash
 WPEB_NOW=$(date +"%Y-%m-%d-%H%M")
 WPEB_MAIN="https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh"
 WPEB_TEMP="/tmp/wpeb.$WPEB_NOW"
@@ -50,7 +50,7 @@ run_update() {
 }
 run_install() {
 	WPEB_TEMP_DL=$(curl -sSL "$WPEB_MAIN" -o "$WPEB_TEMP")
-	if [ $WPEB_DOWN_OK -ne 0 ]; then
+	if [ $WPEB_TEMP_DL -ne 0 ]; then
 		# For some reason we couldn't download, let's bail.
 		echo ""
 		echo " *** For some reason, i couldn't download the latest version of WPEB"

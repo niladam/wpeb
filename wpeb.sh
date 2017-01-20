@@ -160,7 +160,7 @@ function check_for_wordpress() {
 	    # # issue: https://github.com/wp-cli/wp-cli/issues/3752
 	    wp core is-installed &>/dev/null
 	    INSTALLED_CODE=$?
-	    if [ $INSTALLED_CODE -ne 0 ]; then
+	    if [ $INSTALLED_CODE -eq 0 ]; then
 	    	# WordPress appears to be missing, let's abort.
 	    	show_message "WordPress tables are missing too, aborting.." notok
 	    	exit 1
@@ -245,7 +245,7 @@ run_update() {
 	WPEB_TARGET="/usr/local/bin/wpeb"
 	WPEB_TEMP_DL=$(curl -sSL $WPEB_MAIN -o $WPEB_TEMP)
 	WPEB_DOWN_OK=$?
-	if [ $WPEB_DOWN_OK -ne 0 ]; then
+	if [ $WPEB_DOWN_OK -eq 0 ]; then
 		# For some reason we couldn't download, let's bail.
 		echo ""
 		echo " *** For some reason, i couldn't download the latest version of WPEB"
