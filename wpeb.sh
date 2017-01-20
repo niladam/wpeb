@@ -264,6 +264,7 @@ run_update() {
 	  	echo ""
 	  	echo " *** New version, $WPEB_NEW_VERSION was updated. Enjoy!"
 	  	echo ""
+	  	exit 0
 	else
 		# Now that should be impossible!:)
 		echo " *** Apparently, the installed version is NEWER than the CURRENT version.."
