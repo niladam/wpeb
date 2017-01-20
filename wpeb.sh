@@ -60,8 +60,15 @@ WPEB_COMPRESSION="9"
 # no  = not a cPanel server and this script will die, unless it's called
 # WPEB_CPANEL="yes"
 # DEBUGGING
-# Return any messages
-WPEB_QUIET="yes"
+# By default, the script will show some output messages as it executes, but
+# you can disable that.
+# yes  = yes, show the script's output messages.
+# no   = no, hide everything, but write to wpeb_debug.log
+WPEB_DEBUG="yes"
+# DEBUG LOG
+# You can name your debug log here. It defaults to wpeb_debug.log
+# Care should be taken as this could write to some other log files.
+WPEB_DEBUG_LOG="wpeb_debug.log"
 
 # Some basic constants, usually there's no need to edit these.
 # But feel free to change the date format to something else.
@@ -92,17 +99,37 @@ function wp() {
 # notok	= Message shown in red
 # *		= Anything else is by default a warning, and shown in yellow.
 function show_message() {
-	case "$2" in
-			"ok")
-				echo -e "${V}[*]" "$1" "${N}"
-				;;
-			"notok")
-				echo -e "${R}[*]" "$1" "${N}"
-				;;
-			*)
-				echo -e "${G}[*]" "$1" "${N}"
-				;;
-	esac
+	if [ "$WPEB_DEBUG" == "yes" ]; then
+		# Debugging enabled, showing messages and not writing a log.
+		case "$2" in
+				"ok")
+					echo -e "${V}[*]" "$1" "${N}"
+					;;
+				"notok")
+					echo -e "${R}[*]" "$1" "${N}"
+					;;
+				*)
+					echo -e "${G}[*]" "$1" "${N}"
+					;;
+		esac
+	else
+		# Debugging disabled, we should write to debug log.
+		if [ -z "$WPEB_DEBUG_LOG" ]; then
+			WPEB_DEBUG_LOG="wpeb_debug.log"
+		fi
+			case "$2" in
+				"ok")
+					echo "SUCCESS:" "$1" >> "$WPEB_DEBUG_LOG"
+					;;
+				"notok")
+					echo "ERROR:" "$1" >> "$WPEB_DEBUG_LOG"
+					;;
+				*)
+					echo "INFO:" "$1" >> "$WPEB_DEBUG_LOG"
+					;;
+			esac
+	fi
+
 }
 # Checking for WP-CLI and returning a message if not found.
 function check_for_wp_cli() {

@@ -6,6 +6,7 @@
 - [x] Configurable repair and optimize
 - [x] Configurable compression 'power'
 - [x] Run as root
+- [x] Ability to quiet everything and write a debug log.
 - [ ] Create installer for easy running ?
 - [ ] Add command parameters (ie `--skip-uploads`, `--repair`, `--optimize`, `--compression`, `--output-folder`)
 - [ ] *Provide ability to have wp-cli installed*
