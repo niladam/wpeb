@@ -1,3 +1,6 @@
-title: installer
-redirect_to:
-  - https://raw.githubusercontent.com/niladam/wpeb/master/installer
+---
+layout: 'redirect'
+permalink: /installer
+redir_to: 'https://raw.githubusercontent.com/niladam/wpeb/master/installer'
+sitemap: false
+---
