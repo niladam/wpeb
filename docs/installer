@@ -1,1 +1,3 @@
-../installer
+title: installer
+redirect_to:
+  - https://raw.githubusercontent.com/niladam/wpeb/master/installer
