@@ -18,6 +18,9 @@
 # of the License, or (optionally) any later version.
 #
 
+# Version declaration, to be used in script update checks.
+WPEB_VER="1.1b"
+
 # Some configuration options
 # WP-CLI
 # Your wp-cli path location
@@ -291,7 +294,7 @@ case $i in
 		show_message "Self-update functionality is still in developent" ok
 		;;
     -h|--h|--help)
-        echo ""
+        echo ${B}${V} ""
         echo "                        _          "
         echo "   __      ___ __   ___| |__       "
         echo "   \ \ /\ / / '_ \ / _ \ '_ \      "
@@ -300,6 +303,7 @@ case $i in
         echo "            |_|                    "
         echo "                       v. $WPEB_VER"
         echo "  https://niladam.github.io/wpeb   "
+        echo ${N} ""
         cat <<EOF
     WPEB (WordPress Easy Backup) is a simple bash script that
         takes a snapshot of the current WordPress folder. The script is built
@@ -311,25 +315,25 @@ case $i in
     Usage: wpeb [optional flags]
 
     [FLAGS]
-        --su=, --skip-uploads=      yes/no (Defaults to yes, skipping uploads folder)
+        --su=, --skip-uploads=      ${B}${V}yes/no${N} (Defaults to yes, skipping uploads folder)
                                     yes: include uploads
                                     no:  skip uploads
 
-        --ro=, --repair-optimize=   yes/no (Defaults to yes, repair and optimize db)
+        --ro=, --repair-optimize=   ${B}${V}yes/no${N} (Defaults to yes, repair and optimize db)
                                     yes: repair and optimize db
                                     no:  skip repairing and optimizing
 
-        --co=, --compression=       1-9 (Defaults to 9, compression rate)
+        --co=, --compression=       ${B}${V}1-9${N} (Defaults to 9, compression rate)
                                     1 - fastest (compression, largest file)
                                     9 - best (compression, smallest file)
 
         --of=, --output-folder=     Defaults to the site's root directory.
-                                    The folder path should be absolute
+                                    ${B}Absolute folder path${N}
                                     EG: /srv/backups/
                                     Folder will be created if it doesn't exist.
 
         --up, --self-update         Self update this script to the latest version.
-                                    Uses curl if available and fallsback to wget,
+                                    Uses ${B}curl${N} if available and fallsback to ${B}wget${N},
                                     if curl is missing.
 
         --h, --help                 This help screen.
