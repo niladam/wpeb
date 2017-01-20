@@ -29,7 +29,7 @@ run_update() {
 		exit 1
 	fi
 	WPEB_NEW_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')
-	WPEB_OLD_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')
+	WPEB_OLD_VERSION=$(grep WPEB_VER "$WPEB_TEMP" | head -1 | cut -d = -f2 | tr -d '"')
 	if echo "$WPEB_NEW_VERSION" "$WPEB_OLD_VERSION" | awk '{exit $1>$2?0:1}'
 	then
 		# echo WPEB_NEW_VERSION greater than WPEB_OLD_VERSION
