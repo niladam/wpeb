@@ -1,6 +1,7 @@
-<p align="center"
-[![Build Status](https://travis-ci.org/niladam/wpeb.svg?branch=master)](https://travis-ci.org/niladam/wpeb)
+<p align="center">
+<a href="https://travis-ci.org/niladam/wpeb"><img src="https://travis-ci.org/niladam/wpeb.svg?branch=master"></a>
 </p>
+
 ## WPEB (WordPress Easy Backup): A simple (pre-update) wordpress backup script.
 #### (c) 2017 Madalin Tache
 #### http://github.com/niladam/wpeb
