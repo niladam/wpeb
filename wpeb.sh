@@ -216,7 +216,7 @@ function backup_wordpress() {
 # }
 function cleanup() {
 	if [ -f "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ]; then
-		rm -rf "$WPEB_EXPORTED_DB"
+		rm -rf "$WPEB_EXPORTED_DB.bz2"
 		show_message "Removed $WPEB_EXPORTED_DB as the archive file exists containing it."
 		show_message "Backup completed, the archive path is: $WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ok
 	else
