@@ -336,6 +336,7 @@ case $i in
 
     %% Enjoy WPEB.
 EOF
+exit 0
     ;;
 esac
     shift
