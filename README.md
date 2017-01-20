@@ -1,5 +1,5 @@
 <p align="center">
-<a href='https://ko-fi.com/A204JA0' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=f' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>&nbsp;&nbsp;<a href="https://travis-ci.org/niladam/wpeb"><img src="https://travis-ci.org/niladam/wpeb.svg?branch=master"></a>
+<a href='https://ko-fi.com/A204JA0' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=f' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>&nbsp;&nbsp;<a href="https://travis-ci.org/niladam/wpeb"><img height="36" src="https://travis-ci.org/niladam/wpeb.svg?branch=master"></a>
 </p>
 
 ## WPEB (WordPress Easy Backup): A simple (pre-update) wordpress backup script.
