@@ -32,7 +32,9 @@ By default the plugin does the following:
 Install with:
 
 `curl -O https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh`
+
 `chmod +x wpeb.sh`
+
 `mv wpeb.sh /usr/local/bin/wpeb`
 
 # Using
@@ -42,6 +44,7 @@ Install with:
 Use with:
 
 `cd /home/someuser/public_html`
+
 `wpeb`
 
 And the magic happens.
