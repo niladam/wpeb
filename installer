@@ -36,6 +36,7 @@ run_update() {
 		# Got newer version, move to target file.
 		echo " *** New version found, $WPEB_NEW_VERSION. You have $WPEB_OLD_VERSION. Proceeding with install.."
 	  	mv -f "$WPEB_TEMP" "$WPEB_TARGET"
+	  	chmod +x "$WPEB_TARGET"
 	  	echo ""
 	  	echo " *** New version, $WPEB_NEW_VERSION was updated. Enjoy!"
 	  	echo ""
@@ -55,6 +56,7 @@ run_install() {
 		# For some reason we couldn't download, let's bail.
 		echo ""
 		echo " *** For some reason, i couldn't download the latest version of WPEB"
+		echo " *** CURL exit code: $WPEB_TEMP_DL "
 		echo " *** Maybe you want to have a look at the docs and try a manual install ?"
 		echo " *** https://niladam.github.io/wpeb  ***"
 		echo ""
@@ -62,6 +64,7 @@ run_install() {
 	else
 		echo " *** WPEB not found on the system. Installing $WPEB_NEW_VERSION.."
 		mv -f "$WPEB_TEMP" "$WPEB_TARGET"
+		chmod +x "$WPEB_TARGET"
 		echo ""
 		echo " *** WPEB version $WPEB_NEW_VERSION was installed. Enjoy!"
 		echo ""
