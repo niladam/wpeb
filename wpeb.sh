@@ -2,7 +2,7 @@
 
 #
 # WPEB (WordPress Easy Backup): A simple (pre-update) wordpress backup script.
-# v1.1b (released 20th January 2017)
+# v1.2 (released 20th January 2017)
 # (c) 2017 Madalin Tache
 # http://github.com/niladam/wpeb
 #
