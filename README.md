@@ -53,4 +53,10 @@ cd /home/someuser/public_html
 wpeb
 ```
 
-And the magic happens.
+# TODO
+
+Have a look at the [TODO](TODO.md) list.
+
+# License
+
+WPEB (WordPress Easy Backup) is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (optionally) any later version.
