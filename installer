@@ -18,7 +18,7 @@ run_update() {
 	# We already know the file exists from the check for old version,
 	# let's get the version and just compare.
 	# Go ahead with the download.
-	WPEB_TEMP_DL=$(curl -sSL $WPEB_MAIN -o $WPEB_TEMP)
+	WPEB_TEMP_DL=$(curl -sSL "$WPEB_MAIN" -o "$WPEB_TEMP")
 	WPEB_DOWN_OK=$?
 	if [ $WPEB_DOWN_OK -ne 0 ]; then
 		# For some reason we couldn't download, let's bail.
@@ -49,7 +49,7 @@ run_update() {
 	fi
 }
 run_install() {
-	WPEB_TEMP_DL=$(curl -sSL $WPEB_MAIN -o $WPEB_TEMP)
+	WPEB_TEMP_DL=$(curl -sSL "$WPEB_MAIN" -o "$WPEB_TEMP")
 	if [ $WPEB_DOWN_OK -ne 0 ]; then
 		# For some reason we couldn't download, let's bail.
 		echo ""
