@@ -155,7 +155,9 @@ function check_for_wordpress() {
 	    # exit 1
 	    # # This needs some fixing as apparently there's a bug in WP-CLI
 	    # # issue: https://github.com/wp-cli/wp-cli/issues/3752
-	    if ! $(wp core is-installed &>/dev/null); then
+	    wp core is-installed &>/dev/null
+	    INSTALLED_CODE=$?
+	    if [ $INSTALLED_CODE -ne 0 ] then
 	    	# WordPress appears to be missing, let's abort.
 	    	show_message "WordPress tables are missing too, aborting.." notok
 	    	exit 1
