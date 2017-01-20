@@ -235,5 +235,107 @@ function run_backup() {
 	cleanup
 }
 
+# Let's add arguments functionality
+for i in "$@"
+do
+case $i in
+    --su=*|--skip-uploads=*)
+        if [[ "${i#*=}" != yes && "${i#*=}" != no ]]; then
+            show_message "skip-uploads can only be yes or no.    Defaults to yes" notok
+            exit 1
+        fi
+		if [ ! -z "${i#*=}" ]; then
+            WPEB_UPLOADS="${i#*=}"
+        fi
+        shift
+        ;;
+    --ro=*|--repair-optimize=*)
+        if [ ! -z "${i#*=}" ]; then
+            if [[ "${i#*=}" != yes && "${i#*=}" != no ]]; then
+                show_message "ro (repair/optimize) can only be yes or no.    Defaults to yes" notok
+                exit 1
+            fi
+            WPEB_REPOPTIM="${i#*=}"
+        fi
+        shift
+        ;;
+    --co=*|--compression=*)
+        if [ ! -z "${i#*=}" ]; then
+            if [ ! "${i#*=}" -ge 1 -a "${i#*=}" -le 9 ]; then
+                show_message "compression levels can be 1 to 9.    Defaults to 9." notok
+                exit 1
+            fi
+            WPEB_COMPRESSION="${i#*=}"
+        fi
+        shift
+        ;;
+    --of=*|--output-folder=*)
+        if [ ! -z "${i#*=}" ]; then
+            WPEB_BFP="${i#*=}"
+        fi
+        shift
+        ;;
+    --q=*|--quiet=*)
+        if [ ! -z "${i#*=}" ]; then
+            if [[ "${i#*=}" != yes && "${i#*=}" != no ]]; then
+                show_message "quiet can only be yes or no.    Defaults to no" notok
+                exit 1
+            fi
+            WPEB_DEBUG="${i#*=}"
+        fi
+        shift
+        ;;
+    -h|--h|--help)
+        echo ""
+        echo "                        _          "
+        echo "   __      ___ __   ___| |__       "
+        echo "   \ \ /\ / / '_ \ / _ \ '_ \      "
+        echo "    \ V  V /| |_) |  __/ |_) |     "
+        echo "     \_/\_/ | .__/ \___|_.__/      "
+        echo "            |_|                    "
+        echo "                       v. $WPEB_VER"
+        echo "  https://niladam.github.io/wpeb   "
+        cat <<EOF
+    WPEB (WordPress Easy Backup) is a simple bash script that
+        takes a snapshot of the current WordPress folder. The script is built
+        with speed in mind and thought as a pre-update backup of the current
+        site, therefore some options might need to be used for an actual
+        full backup. The backup excludes the uploads folder to prevent huge
+        backups, and some files that are not required (like error_log files)
+
+    Usage: wpeb [optional flags]
+
+    [FLAGS]
+        --su=, --skip-uploads=      yes/no (Defaults to yes, skipping uploads folder)
+                                    yes: include uploads
+                                    no:  skip uploads
+
+        --ro=, --repair-optimize=   yes/no (Defaults to yes, repair and optimize db)
+                                    yes: repair and optimize db
+                                    no:  skip repairing and optimizing
+
+        --co=, --compression=       1-9 (Defaults to 9, compression rate)
+                                    1 - fastest (compression, largest file)
+                                    9 - best (compression, smallest file)
+
+        --of=, --output-folder=     Defaults to the site's root directory.
+                                    The folder path should be absolute
+                                    EG: /srv/backups/
+                                    Folder will be created if it doesn't exist.
+
+        --up, --self-update         Self update this script to the latest version.
+                                    Uses curl if available and fallsback to wget,
+                                    if curl is missing.
+
+        --h, --help                 This help screen.
+
+    %% Enjoy WPEB.
+EOF
+    ;;
+esac
+    shift
+done
+# Arguments end
+
 # We should have everything, let's run the backup :)
 run_backup
