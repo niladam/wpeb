@@ -157,7 +157,7 @@ function check_for_wordpress() {
 	    # # issue: https://github.com/wp-cli/wp-cli/issues/3752
 	    wp core is-installed &>/dev/null
 	    INSTALLED_CODE=$?
-	    if [ $INSTALLED_CODE -ne 0 ] then
+	    if [ $INSTALLED_CODE -ne 0 ]; then
 	    	# WordPress appears to be missing, let's abort.
 	    	show_message "WordPress tables are missing too, aborting.." notok
 	    	exit 1
