@@ -19,7 +19,7 @@ run_update() {
 	# Go ahead with the download.
 	WPEB_TEMP_DL=$(curl -sSL "$WPEB_MAIN" -o "$WPEB_TEMP")
 	WPEB_DOWN_OK=$?
-	if [ $WPEB_DOWN_OK -ne 0 ]; then
+	if [ "$WPEB_DOWN_OK" -ne 0 ]; then
 		# For some reason we couldn't download, let's bail.
 		echo ""
 		echo " *** For some reason, i couldn't download the latest version of WPEB"
@@ -30,8 +30,8 @@ run_update() {
 	fi
 	WPEB_NEW_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')
 	WPEB_OLD_VERSION=$(grep WPEB_VER "$WPEB_TEMP" | head -1 | cut -d = -f2 | tr -d '"')
-	if echo "$WPEB_NEW_VERSION" "$WPEB_OLD_VERSION" | awk '{exit $1>$2?0:1}'
-	then
+	# if echo "$WPEB_NEW_VERSION" "$WPEB_OLD_VERSION" | awk '{exit $1>$2?0:1}'
+	if [ "$WPEB_NEW_VERSION" -gt "$WPEB_OLD_VERSION" ]; then
 		# echo WPEB_NEW_VERSION greater than WPEB_OLD_VERSION
 		# Got newer version, move to target file.
 		echo " *** New version found, $WPEB_NEW_VERSION. You have $WPEB_OLD_VERSION. Proceeding with install.."
@@ -41,9 +41,9 @@ run_update() {
 	  	echo ""
 	else
 		# Now that should be impossible!:)
-		echo " *** Apparently, the installed version is NEWER than the CURRENT version.."
+		echo " *** Apparently, the installed version is newer or current.."
 		echo " *** Current: $WPEB_OLD_VERSION // NEW: $WPEB_NEW_VERSION"
-		echo " *** This can happen if the file has been manually modified and/or altered.."
+		# echo " *** This can happen if the file has been manually modified and/or altered.."
 		echo " *** If you think this is a mistake, please open an issue at "
 		echo " *** https://github.com/niladam/wpeb/issues *** "
 		exit 1
@@ -51,7 +51,7 @@ run_update() {
 }
 run_install() {
 	WPEB_TEMP_DL=$(curl -sSL "$WPEB_MAIN" -o "$WPEB_TEMP")
-	if [ $WPEB_TEMP_DL -ne 0 ]; then
+	if [ "$WPEB_TEMP_DL" -ne 0 ]; then
 		# For some reason we couldn't download, let's bail.
 		echo ""
 		echo " *** For some reason, i couldn't download the latest version of WPEB"
