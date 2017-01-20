@@ -59,6 +59,9 @@ WPEB_COMPRESSION="9"
 # yes = cd into username's main document root and backup that.
 # no  = not a cPanel server and this script will die, unless it's called
 # WPEB_CPANEL="yes"
+# DEBUGGING
+# Return any messages
+WPEB_QUIET="yes"
 
 # Some basic constants, usually there's no need to edit these.
 # But feel free to change the date format to something else.
@@ -66,6 +69,11 @@ WPEB_COMPRESSION="9"
 WPEB_NOW=$(date +"%Y-%m-%d-%H%M")
 WPEB_CWD=$(pwd)
 WPEB_TAR="/usr/bin/tar"
+R=`tput setaf 1`        # red
+V=`tput setaf 2`        # green
+G=`tput setaf 3`		# yellow
+N=`tput sgr0`           # normal
+B=`tput bold`           # bold..
 
 ################################################################################
 #
@@ -79,13 +87,31 @@ WPEB_TAR="/usr/bin/tar"
 function wp() {
   "$WPEB_WPCLIPATH" "$@" --allow-root
 }
+# Let's use a function to return based on success/error
+# ok	= Message shown in green
+# notok	= Message shown in red
+# *		= Anything else is by default a warning, and shown in yellow.
+function show_message() {
+	case "$2" in
+			"ok")
+				echo -e "${V}[*]" "$1" "${N}"
+				;;
+			"notok")
+				echo -e "${R}[*]" "$1" "${N}"
+				;;
+			*)
+				echo -e "${G}[*]" "$1" "${N}"
+				;;
+	esac
+}
+# Checking for WP-CLI and returning a message if not found.
 function check_for_wp_cli() {
 	if [ -z "$WPEB_WPCLIPATH" ]; then
-		echo "WP-CLI path variable is empty, aborting.."
+		show_message "WP-CLI path variable is empty, aborting.." notok
 		exit 1
 	fi
 	if ! type "$WPEB_WPCLIPATH" > /dev/null; then
-		echo "WP-CLI variable is set, but the program doesn't exist, aborting.."
+		show_message "WP-CLI variable is set, but the program doesn't exist, aborting.." notok
 		exit 1
 		# Install WP-CLI here in the future ?
 	fi
@@ -93,37 +119,53 @@ function check_for_wp_cli() {
 	# so i'll just leave this here commented for now.
 	# $WPEB_WPCLI_VER=`wp --info | tail -n1 | cut -d : -f2 | tr -d " \t"`
 }
+# Let's check this is actually a WordPress site
 function check_for_wordpress() {
-	# This needs some fixing as apparently there's a bug in WP-CLI
-	# issue: https://github.com/wp-cli/wp-cli/issues/3752
-	# if ! $(wp core is-installed); then
-	#     # WordPress appears to be missing, let's abort.
-	#     echo "This isn't a WordPress site, aborting.."
-	#     exit 1
-	# else
-	# 	echo "Yep, this looks like it's a WordPress site.."
-	# fi
+	# First we check for wp-includes/versio.php
 	if [ ! -f "$WPEB_CWD/wp-includes/version.php" ]; then
-	    # nope, not WordPress, let's abort..
-	    echo "This script needs to be executed in the main WordPress folder that you're trying to backup. Aborting..."
-	    exit 1
+	    # nope, not WordPress, let's warn and check tables using wp-cli
+	    show_message "The file version.php is missing in wp-includes, checking for tables.."
+	    # exit 1
+	    # # This needs some fixing as apparently there's a bug in WP-CLI
+	    # # issue: https://github.com/wp-cli/wp-cli/issues/3752
+	    if ! $(wp core is-installed &>/dev/null); then
+	    	# WordPress appears to be missing, let's abort.
+	    	show_message "WordPress tables are missing too, aborting.." notok
+	    	exit 1
+	    fi
 	fi
 }
+# Let's export the database and archive it.
 function backup_db() {
-	WPEB_EXPORTED_DB=$(wp db export --porcelain)
+	# WPEB_EXPORTED_DB=$( (wp db export --porcelain --allow-root) 2>&1)
+	WPEB_EXPORTED_DB=$(wp db export --porcelain 2>&1)
 	bzip2 "$WPEB_EXPORTED_DB"
+	if [ -f "$WPEB_EXPORTED_DB.bz2" ]; then
+		show_message "Created $WPEB_ARCHIVED_DB" ok
+	else
+		show_message "Failed to archive the SQL dump, aborting." notok
+		exit 1
+	fi
 }
+# Let's repair and optimize if configured so
 function repair_and_optimize() {
 	if [ "$WPEB_BACKUP_DB" == "yes" ]; then
 		if [ "$WPEB_REPOPTIM" == "yes" ]; then
-		echo "Running repair and optimization on the current database.."
-		wp db repair
+		show_message "Running repair and optimization on the current database.." ok
+		wp db repair &>/dev/null
+		if [ $? -eq 0 ]
+			show_message "DB repair failed.." notok
+		fi
 		wp db optimize
+		if [ $? -eq 0 ]
+			show_message "DB optimize failed.." notok
+		fi
 		fi
 		backup_db
 	fi
 
 }
+# Let's create our archive containing everything
 function backup_wordpress() {
 	# Let's first get the siteurl and make sure we use the domain/subdomain
 	# in the archive name.
@@ -143,9 +185,17 @@ function backup_wordpress() {
 # 	# In the future, the script will be able to handle username, and run commands
 # 	# based on the user's main document root.
 # }
-# function cleanup() {
-
-# }
+function cleanup() {
+	if [ -f "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ]; then
+		rm -rf "$WPEB_EXPORTED_DB"
+		show_message "Removed $WPEB_EXPORTED_DB as the archive file exists containing it."
+		show_message "Backup completed, the archive path is: $WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ok
+	else
+		show_message "$WPEB_EXPORTED_DB not removed, as the archive file doesn't exist."
+		show_message "Everything appears to have be running corectly, however the backup file doesn't exist" notok
+	fi
+}
+# Main backup function, running all the functions in order
 function run_backup() {
 	# go_where
 	check_for_wp_cli
@@ -153,7 +203,7 @@ function run_backup() {
 	repair_and_optimize
 	# backup_db
 	backup_wordpress
-	# cleanup
+	cleanup
 }
 
 # We should have everything, let's run the backup :)
