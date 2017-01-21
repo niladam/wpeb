@@ -32,7 +32,7 @@ run_update() {
 	WPEB_NEW_VERSION=$(grep WPEB_VER "$WPEB_TEMP" | head -1 | cut -d = -f2 | tr -d '"')
 	WPEB_OLD_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')
 	WPEB_GT=$(echo "$WPEB_NEW_VERSION > $WPEB_OLD_VERSION" | bc -q )
-	if [ "$WPEB_GT" = 1 ] then
+	if [ "$WPEB_GT" = 1 ]; then
 		# Got newer version, move to target file.
 		echo " *** New version found, $WPEB_NEW_VERSION. You have $WPEB_OLD_VERSION. Proceeding with install.."
 	  	mv -f "$WPEB_TEMP" "$WPEB_TARGET"
