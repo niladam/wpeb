@@ -29,8 +29,8 @@ run_update() {
 		run_cleanup
 		exit 1
 	fi
-	WPEB_NEW_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')
-	WPEB_OLD_VERSION=$(grep WPEB_VER "$WPEB_TEMP" | head -1 | cut -d = -f2 | tr -d '"')
+	WPEB_NEW_VERSION=$(grep WPEB_VER "$WPEB_TEMP" | head -1 | cut -d = -f2 | tr -d '"')
+	WPEB_OLD_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')
 	# if echo "$WPEB_NEW_VERSION" "$WPEB_OLD_VERSION" | awk '{exit $1>$2?0:1}'
 	if [ "$WPEB_NEW_VERSION" -gt "$WPEB_OLD_VERSION" ]; then
 		# echo WPEB_NEW_VERSION greater than WPEB_OLD_VERSION
@@ -53,6 +53,7 @@ run_update() {
 }
 run_install() {
 	WPEB_TEMP_DL=$(curl -sSL "$WPEB_MAIN" -o "$WPEB_TEMP")
+	WPEB_NEW_VERSION=$(grep WPEB_VER "$WPEB_TEMP" | head -1 | cut -d = -f2 | tr -d '"')
 	if [ "$WPEB_TEMP_DL" -ne 0 ]; then
 		# For some reason we couldn't download, let's bail.
 		echo ""
