@@ -263,6 +263,7 @@ run_update() {
 		# Got newer version, move to target file.
 		echo " *** New version found, $WPEB_NEW_VERSION. You have $WPEB_OLD_VERSION. Proceeding with install.."
 	  	mv -f "$WPEB_TEMP" "$WPEB_TARGET"
+	  	chmod +x "$WPEB_TARGET"
 	  	echo ""
 	  	echo " *** New version, $WPEB_NEW_VERSION was updated. Enjoy!"
 	  	echo ""
