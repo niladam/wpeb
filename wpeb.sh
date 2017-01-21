@@ -244,7 +244,7 @@ run_update() {
 	WPEB_TEMP="/tmp/wpeb.$WPEB_NOW_UPDATE"
 	WPEB_TARGET="/usr/local/bin/wpeb"
 	WPEB_OLD_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')
-	WPEB_TEMP_DL=$(curl -sSL $WPEB_MAIN -o $WPEB_TEMP)
+	WPEB_TEMP_DL=$(curl -sSL "$WPEB_MAIN" -o "$WPEB_TEMP")
 	WPEB_DOWN_OK=$?
 	if [ $WPEB_DOWN_OK -eq 0 ]; then
 		# For some reason we couldn't download, let's bail.
@@ -253,6 +253,7 @@ run_update() {
 		echo " *** Maybe you want to have a look at the docs and try a manual install ?"
 		echo " *** https://niladam.github.io/wpeb  ***"
 		echo ""
+		rm -rf "$WPEB_TEMP"
 		exit 1
 	fi
 	WPEB_NEW_VERSION=$(grep WPEB_VER "$WPEB_TEMP" | head -1 | cut -d = -f2 | tr -d '"')
@@ -272,6 +273,7 @@ run_update() {
 		echo " *** This can happen if the file has been manually modified and/or altered.."
 		echo " *** If you think this is a mistake, please open an issue at "
 		echo " *** https://github.com/niladam/wpeb/issues *** "
+		rm -rf "$WPEB_TEMP"
 		exit 1
 	fi
 }

@@ -26,6 +26,7 @@ run_update() {
 		echo " *** Maybe you want to have a look at the docs and try a manual install ?"
 		echo " *** https://niladam.github.io/wpeb  ***"
 		echo ""
+		run_cleanup
 		exit 1
 	fi
 	WPEB_NEW_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')
@@ -46,6 +47,7 @@ run_update() {
 		# echo " *** This can happen if the file has been manually modified and/or altered.."
 		echo " *** If you think this is a mistake, please open an issue at "
 		echo " *** https://github.com/niladam/wpeb/issues *** "
+		run_cleanup
 		exit 1
 	fi
 }
@@ -58,6 +60,7 @@ run_install() {
 		echo " *** Maybe you want to have a look at the docs and try a manual install ?"
 		echo " *** https://niladam.github.io/wpeb  ***"
 		echo ""
+		run_cleanup
 		exit 1
 	else
 		echo " *** WPEB not found on the system. Installing $WPEB_NEW_VERSION.."
@@ -66,6 +69,11 @@ run_install() {
 		echo " *** WPEB version $WPEB_NEW_VERSION was installed. Enjoy!"
 		echo ""
 	fi
+
+}
+run_cleanup() {
+	# Let's clean up after ourselves..
+	rm -rf "$WPEB_TEMP"
 }
 
 # We have everything, let's proceed.
