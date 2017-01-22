@@ -228,6 +228,7 @@ function install_wp_cli() {
 		rm -rf "$WPEB_WPCLIPATH"
 		exit 1
 	else
+		chmod +x "$WPEB_WPCLIPATH"
 		show_message ""
 		show_message "${B}WP-CLI${N} install successful" ok
 		show_message "${B}WP-CLI${N} has been installed in $WPEB_WPCLIPATH" ok
