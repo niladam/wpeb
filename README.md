@@ -39,6 +39,20 @@ Install with:
 curl -sSL https://wpeb-installer.includes.io | bash
 ```
 
+# Updating
+
+If you want to update the script you can use two options. Either run the same command as the install (will auto-update if needed), or use the built-in updater
+
+```bash
+wpeb --up
+```
+
+or
+
+```bash
+wpeb --self-update
+```
+
 # Using
 
 ***For now, the plugin will only function if called from the *main WordPress* folder.***

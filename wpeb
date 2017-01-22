@@ -437,10 +437,10 @@ case $i in
                                     EG: /srv/backups/
                                     Folder will be created if it doesn't exist.
 
-        --q, --quiet 				Passing this will silence all output from wpeb, and write
-        							everything to a file called ${B}${V}wpeb_debug.log${N} in the
-        							current working directory.
-        							(WARNING: wp-cli might return some notices/errors)
+        --q, --quiet                Passing this will silence all output from wpeb, and write
+                                    everything to a file called ${B}${V}wpeb_debug.log${N} in the
+                                    current working directory.
+                                    (WARNING: wp-cli might return some notices/errors)
 
         --up, --self-update         Self update this script to the latest version.
                                     Uses ${B}curl${N} if available and fallsback to ${B}wget${N},
