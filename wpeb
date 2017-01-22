@@ -183,15 +183,17 @@ function backup_db() {
 function repair_and_optimize() {
 	if [ "$WPEB_BACKUP_DB" == "yes" ]; then
 		if [ "$WPEB_REPOPTIM" == "yes" ]; then
-		show_message "Running repair and optimization on the current database.." ok
-		wp db repair &>/dev/null
-		if [ $? -eq 0 ]; then
-			show_message "DB repair failed.." notok
-		fi
-		wp db optimize
-		if [ $? -eq 0 ]; then
-			show_message "DB optimize failed.." notok
-		fi
+			show_message "Repair and optimize requested." ok
+			show_message "Running repair and optimization on the current database.." ok
+			wp db repair &>/dev/null
+			if [ $? -eq 0 ]; then
+				show_message "DB repair failed.." notok
+			fi
+			wp db optimize
+			if [ $? -eq 0 ]; then
+				show_message "DB optimize failed.." notok
+			fi
+			show_message "Repair and optimize done, let's proceed with the backup" info
 		fi
 		backup_db
 	fi
@@ -202,6 +204,8 @@ function backup_wordpress() {
 	# Let's first get the siteurl and make sure we use the domain/subdomain
 	# in the archive name.
 	WPEB_SITEURL=`wp option get siteurl | cut -d'/' -f3`
+	WPEB_CURRENT_OWNER=$(ls -l wp-config.php | awk '{ print $3 }')
+	show_message "Backing up $WPEB_SITEURL owned by $WPEB_CURRENT_OWNER" info
 	if [ -z "$WPEB_BFP" ]; then
 		WPEB_BFP=$WPEB_CWD
 	fi
@@ -212,6 +216,8 @@ function backup_wordpress() {
 		tar -cf "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar" --exclude='wp-content/uploads/*' --exclude='error_log' *
 		gzip -9 "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar"
 	fi
+	show_message "Changing archive ownership to the current wp-config owner.." ok
+	chown "$WPEB_CURRENT_OWNER:$WPEB_CURRENT_OWNER" "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.*"
 }
 # function go_where() {
 # 	# In the future, the script will be able to handle username, and run commands
@@ -220,8 +226,12 @@ function backup_wordpress() {
 function cleanup() {
 	if [ -f "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ]; then
 		rm -rf "$WPEB_EXPORTED_DB.bz2"
+		WPEB_BACKUP_SIZE=$(ls -alh "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" | awk -F " " {'print $5'})
 		show_message "Removed $WPEB_EXPORTED_DB as the archive file exists containing it."
 		show_message "Backup completed, the archive path is: $WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ok
+		show_message "" ok
+		show_message "" ok
+		show_message "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz has a size of $WPEB_BACKUP_SIZE" ok
 	else
 		show_message "$WPEB_EXPORTED_DB not removed, as the archive file doesn't exist."
 		show_message "Everything appears to have be running corectly, however the backup file doesn't exist" notok
@@ -319,14 +329,16 @@ case $i in
         fi
         shift
         ;;
-    --q=*|--quiet=*)
-        if [ ! -z "${i#*=}" ]; then
-            if [[ "${i#*=}" != yes && "${i#*=}" != no ]]; then
-                show_message "quiet can only be yes or no.    Defaults to no" notok
-                exit 1
-            fi
-            WPEB_DEBUG="${i#*=}"
-        fi
+    --q|--quiet)
+		WPEB_DEBUG="no"
+		WPEB_DEBUG_LOG="$WPEB_CWD/wpeb_debug.log"
+        # if [ ! -z "${i#*=}" ]; then
+        #     if [[ "${i#*=}" != yes && "${i#*=}" != no ]]; then
+        #         show_message "quiet can only be yes or no.    Defaults to no" notok
+        #         exit 1
+        #     fi
+        #     WPEB_DEBUG="${i#*=}"
+        # fi
         shift
         ;;
     --up|--self-update)
@@ -371,6 +383,11 @@ case $i in
                                     ${B}Absolute folder path${N}
                                     EG: /srv/backups/
                                     Folder will be created if it doesn't exist.
+
+        --q, --quiet 				Passing this will silence all output from wpeb, and write
+        							everything to a file called ${B}${V}wpeb_debug.log${N} in the
+        							current working directory.
+        							(WARNING: wp-cli might return some notices/errors)
 
         --up, --self-update         Self update this script to the latest version.
                                     Uses ${B}curl${N} if available and fallsback to ${B}wget${N},
