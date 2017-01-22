@@ -19,7 +19,7 @@
 #
 
 # Version declaration, to be used in script update checks.
-WPEB_VER="1.2"
+WPEB_VER="1.3"
 
 # Some configuration options
 # WP-CLI
@@ -240,7 +240,7 @@ function run_backup() {
 # Self-update functionality
 run_update() {
 	WPEB_NOW_UPDATE=$(date +"%Y-%m-%d-%H%M")
-	WPEB_MAIN="https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh"
+	WPEB_MAIN="https://wpeb-installer.includes.io"
 	WPEB_TEMP="/tmp/wpeb.$WPEB_NOW_UPDATE"
 	WPEB_TARGET="/usr/local/bin/wpeb"
 	WPEB_OLD_VERSION=$(grep WPEB_VER "$WPEB_TARGET" | head -1 | cut -d = -f2 | tr -d '"')

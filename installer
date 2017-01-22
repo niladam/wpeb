@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # curl -sSL https://wpeb-installer.includes.io | bash
 WPEB_NOW=$(date +"%Y-%m-%d-%H%M")
-WPEB_MAIN="https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh"
+WPEB_MAIN="https://wpeb-installer.includes.io"
 WPEB_TEMP="/tmp/wpeb.$WPEB_NOW"
 WPEB_TARGET="/usr/local/bin/wpeb"
 start_checks() {
