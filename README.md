@@ -35,16 +35,9 @@ By default the plugin does the following:
 
 Install with:
 
+```bash
+curl -sSL https://wpeb-installer.includes.io | bash
 ```
-curl -O https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh
-chmod +x wpeb.sh
-mv wpeb.sh /usr/local/bin/wpeb
-```
-
-Or in a one quick command that you can paste:
-
-`curl -O https://raw.githubusercontent.com/niladam/wpeb/master/wpeb.sh ; chmod +x wpeb.sh ; mv wpeb.sh /usr/local/bin/wpeb`
-
 
 # Using
 
@@ -52,9 +45,38 @@ Or in a one quick command that you can paste:
 
 Use with:
 
-```
+```bash
 cd /home/someuser/public_html
 wpeb
+```
+
+# Command Options
+
+```bash
+
+    [FLAGS]
+        --su=, --skip-uploads=      yes/no (Defaults to yes, skipping uploads folder)
+                                    yes: include uploads
+                                    no:  skip uploads
+
+        --ro=, --repair-optimize=   yes/no (Defaults to yes, repair and optimize db)
+                                    yes: repair and optimize db
+                                    no:  skip repairing and optimizing
+
+        --co=, --compression=       1-9 (Defaults to 9, compression rate)
+                                    1 - fastest (compression, largest file)
+                                    9 - best (compression, smallest file)
+
+        --of=, --output-folder=     Defaults to the site's root directory.
+                                    Absolute folder path
+                                    EG: /srv/backups/
+                                    Folder will be created if it doesn't exist.
+
+        --up, --self-update         Self update this script to the latest version.
+                                    Uses curl if available and fallsback to wget,
+                                    if curl is missing.
+
+        --h, --help                 This help screen.
 ```
 
 # TODO

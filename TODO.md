@@ -7,8 +7,9 @@
 - [x] Configurable compression 'power'
 - [x] Run as root
 - [x] Ability to quiet everything and write a debug log.
-- [ ] Create installer for easy running ?
-- [ ] Add command parameters (ie `--skip-uploads`, `--repair`, `--optimize`, `--compression`, `--output-folder`)
+- [x] Create installer for easy running ?
+- [x] Add command parameters (ie `--skip-uploads`, `--repair`, `--optimize`, `--compression`, `--output-folder`)
+- [x] Self-update ?
 - [ ] *Provide ability to have wp-cli installed*
 - [ ] ***Provide alternative if wp-cli is missing?***
 - [ ] User configurable setting (ie: run backup for user)
