@@ -181,7 +181,7 @@ function backup_db() {
 	fi
 	$WPEB_GZIP "$WPEB_EXPORTED_DB"
 	if [ -f "$WPEB_EXPORTED_DB.gz" ]; then
-		show_message "Created $WPEB_ARCHIVED_DB.gz" ok
+		show_message "Created $WPEB_EXPORTED_DB.gz" ok
 	else
 		show_message "Failed to archive the SQL dump, aborting." notok
 		exit 1
