@@ -251,8 +251,6 @@ function backup_wordpress() {
 		$WPEB_TAR -cf "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar" --exclude='wp-content/uploads/*' --exclude='error_log' *
 		$WPEB_GZIP -9 "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar"
 	fi
-	show_message "Changing archive ownership to the current wp-config owner.." ok
-	chown "$WPEB_CURRENT_OWNER:$WPEB_CURRENT_OWNER" "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.*"
 }
 function pre_flight_checks() {
 	if ! type "$WPEB_TAR" > /dev/null; then
@@ -276,13 +274,15 @@ function cleanup() {
 	if [ -f "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ]; then
 		rm -rf "$WPEB_EXPORTED_DB.gz"
 		WPEB_BACKUP_SIZE=$(ls -alh "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" | awk -F " " {'print $5'})
-		show_message "Removed $WPEB_EXPORTED_DB as the archive file exists containing it."
+		show_message "Removed $WPEB_EXPORTED_DB as the archive file exists containing it." ok
+		show_message "Changing archive ownership to the current wp-config owner.." ok
+		chown "$WPEB_CURRENT_OWNER:$WPEB_CURRENT_OWNER" "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz"
 		show_message "Backup completed, the archive path is: $WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ok
 		show_message "" ok
 		show_message "" ok
 		show_message "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz has a size of $WPEB_BACKUP_SIZE" ok
 	else
-		show_message "$WPEB_EXPORTED_DB not removed, as the archive file doesn't exist."
+		show_message "$WPEB_EXPORTED_DB not removed, as the archive file doesn't exist." notok
 		show_message "Everything appears to have be running corectly, however the backup file doesn't exist" notok
 	fi
 }
