@@ -19,7 +19,7 @@
 #
 
 # Version declaration, to be used in script update checks.
-WPEB_VER="1.4"
+WPEB_VER="1.5"
 
 # Some configuration options
 # WP-CLI
