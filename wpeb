@@ -79,7 +79,7 @@ WPEB_DEBUG_LOG="wpeb_debug.log"
 WPEB_NOW=$(date +"%Y-%m-%d-%H%M")
 WPEB_CWD=$(pwd)
 WPEB_TAR="/usr/bin/tar"
-WPEB_BZIP2="/usr/bin/bzip2"
+WPEB_GZIP="/usr/bin/gzip"
 R=`tput setaf 1`        # red
 V=`tput setaf 2`        # green
 G=`tput setaf 3`		# yellow
@@ -173,15 +173,15 @@ function check_for_wordpress() {
 function backup_db() {
 	# WPEB_EXPORTED_DB=$( (wp db export --porcelain --allow-root) 2>&1)
 	WPEB_EXPORTED_DB=$(wp db export --porcelain 2>&1)
-	if [ -f "$WPEB_EXPORTED_DB.sql" ]; then
+	if [ -f "$WPEB_EXPORTED_DB" ]; then
 		show_message "Database dump ... OK" ok
 	else
 		show_message "Database dump ... FAILED, aborting." notok
 		exit 1
 	fi
-	$WPEB_BZIP2 "$WPEB_EXPORTED_DB"
-	if [ -f "$WPEB_EXPORTED_DB.bz2" ]; then
-		show_message "Created $WPEB_ARCHIVED_DB" ok
+	$WPEB_GZIP "$WPEB_EXPORTED_DB"
+	if [ -f "$WPEB_EXPORTED_DB.gz" ]; then
+		show_message "Created $WPEB_ARCHIVED_DB.gz" ok
 	else
 		show_message "Failed to archive the SQL dump, aborting." notok
 		exit 1
@@ -245,38 +245,36 @@ function backup_wordpress() {
 		WPEB_BFP=$WPEB_CWD
 	fi
 	if [ "$WPEB_UPLOADS" == "yes" ]; then
-		$tar -cf "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar" --exclude='error_log' *
-		gzip -9 "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar"
+		$WPEB_TAR -cf "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar" --exclude='error_log' *
+		$WPEB_GZIP -9 "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar"
 	else
-		$tar -cf "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar" --exclude='wp-content/uploads/*' --exclude='error_log' *
-		gzip -9 "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar"
+		$WPEB_TAR -cf "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar" --exclude='wp-content/uploads/*' --exclude='error_log' *
+		$WPEB_GZIP -9 "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar"
 	fi
 	show_message "Changing archive ownership to the current wp-config owner.." ok
 	chown "$WPEB_CURRENT_OWNER:$WPEB_CURRENT_OWNER" "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.*"
 }
 function pre_flight_checks() {
-	# WPEB_TAR="/usr/bin/tar"
-	# WPEB_BZIP2="/usr/bin/bzip2"
 	if ! type "$WPEB_TAR" > /dev/null; then
 		WPEB_TAR=`which tar`
 		if ! type "$WPEB_TAR" > /dev/null; then
-			show_message "TAR: Searched for TAR in /usr/bin/tar and using which." notok
+			show_message "TAR: Searched for TAR in /usr/bin/tar and in $WPEB_TAR." notok
 			show_message "TAR: Looks like it's missing from the system, aborting..." notok
 			exit 1
 		fi
 	fi
-	if ! type "$WPEB_BZIP2" > /dev/null; then
-		WPEB_BZIP2=`which zip`
-		if ! type "$WPEB_BZIP2" > /dev/null; then
-			show_message "ZIP: Searched for ZIP in /usr/bin/zip and using which." notok
-			show_message "ZIP: Looks like it's missing from the system, aborting..." notok
+	if ! type "$WPEB_GZIP" > /dev/null; then
+		WPEB_GZIP=`which gzip`
+		if ! type "$WPEB_GZIP" > /dev/null; then
+			show_message "GZIP: Searched for ZIP in /usr/bin/gzip and in $WPEB_GZIP." notok
+			show_message "GZIP: Looks like it's missing from the system, aborting..." notok
 			exit 1
 		fi
 	fi
 }
 function cleanup() {
 	if [ -f "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ]; then
-		rm -rf "$WPEB_EXPORTED_DB.bz2"
+		rm -rf "$WPEB_EXPORTED_DB.gz"
 		WPEB_BACKUP_SIZE=$(ls -alh "$WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" | awk -F " " {'print $5'})
 		show_message "Removed $WPEB_EXPORTED_DB as the archive file exists containing it."
 		show_message "Backup completed, the archive path is: $WPEB_BFP/$WPEB_SITEURL.$WPEB_NOW.tar.gz" ok
